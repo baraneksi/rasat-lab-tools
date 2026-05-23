@@ -59,26 +59,55 @@ PILLARS: dict[str, list[str]] = {
 
 # arXiv subject categories to search within
 ARXIV_CATS = (
-    "cat:cs.SY OR cat:math.OC OR cat:eess.SY "
+    "cat:cs.SY OR cat:math.OC OR cat:eess.SY OR cat:cs.RO "
     "OR cat:astro-ph.EP OR cat:astro-ph.IM OR cat:math.NA"
 )
 
 # Query strings — run each independently; results are deduplicated by arXiv ID
 QUERIES: list[str] = [
-    "spacecraft trajectory optimization convex",
-    "attitude determination control spacecraft satellite",
-    "sequential convex programming guidance navigation",
-    "orbital mechanics perturbation propagation",
-    "model predictive control spacecraft satellite",
-    "Lyapunov stability spacecraft autonomous",
-    "low-thrust trajectory optimization transfer",
-    "robust attitude control reaction wheel CMG",
-    "formation flying relative motion control",
-    "landing powered descent fuel optimal",
+    # Spacecraft & mission
+    "spacecraft control",
+    "satellite guidance navigation control",
+    "autonomous spacecraft",
+    "space mission optimization",
+
+    # Trajectory & orbital
+    "trajectory optimization",
+    "orbital mechanics",
+    "orbit propagation",
+    "low-thrust transfer",
+    "powered descent landing",
+    "formation flying",
+    "relative motion spacecraft",
+    "cislunar trajectory",
+    "interplanetary trajectory",
+
+    # Attitude
+    "attitude control",
+    "attitude estimation",
+    "attitude determination",
+    "quaternion control",
+    "reaction wheel",
+    "control moment gyro",
+
+    # Optimization methods
+    "sequential convex programming",
+    "convex optimization control",
+    "trajectory optimization direct",
+    "pseudospectral method optimal control",
+    "real-time optimization embedded",
+
+    # Control theory
+    "Lyapunov stability nonlinear",
+    "model predictive control",
+    "robust control spacecraft",
+    "adaptive control nonlinear",
+    "optimal control LQR",
+    "sliding mode control",
 ]
 
 ARXIV_NS = {"atom": "http://www.w3.org/2005/Atom"}
-MAX_RESULTS_PER_QUERY = 30
+MAX_RESULTS_PER_QUERY = 50
 SEARCH_DAYS = 7
 
 
@@ -142,7 +171,7 @@ def collect_papers() -> list[dict]:
     for paper in seen.values():
         scores = _score(paper)
         total = sum(scores.values())
-        if total >= 4:
+        if total >= 3:
             paper["scores"] = scores
             paper["total"] = total
             results.append(paper)
@@ -221,7 +250,7 @@ def build_html(papers: list[dict], date_str: str) -> str:
     <strong>{len(must_reads)}</strong> must-reads &nbsp;·&nbsp;
     <strong>{len(high_rel)}</strong> high relevance &nbsp;·&nbsp;
     Scored on: Orbital Mechanics · ADCS · Numerical Optimization · Control Theory
-    (max 5 per pillar · include ≥4 · high ≥8 · must-read ≥16)
+    (max 5 per pillar · include ≥3 · high ≥8 · must-read ≥16)
   </p>
   {body}
   <hr style="margin-top:32px;border:none;border-top:1px solid #e5e7eb;">
