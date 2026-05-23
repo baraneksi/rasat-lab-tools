@@ -1,0 +1,31 @@
+name: RASAT Weekly Literature Digest
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC = 09:00 Turkey time (UTC+3)
+    - cron: '0 6 * * 1'
+  # Also allows manual trigger from the GitHub Actions UI (Actions tab → Run workflow)
+  workflow_dispatch:
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # No extra pip installs needed — script uses stdlib only (urllib, smtplib, xml)
+
+      - name: Run RASAT digest
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          DIGEST_RECIPIENT: baraneksi4@gmail.com
+        run: python scripts/weekly_digest.py
