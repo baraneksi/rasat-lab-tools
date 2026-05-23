@@ -237,8 +237,8 @@ def build_html(papers: list[dict], date_str: str) -> str:
 # ── Gmail sender ──────────────────────────────────────────────────────────────
 
 def send_email(subject: str, html_body: str) -> None:
-    sender    = os.environ["GMAIL_USER"]
-    password  = os.environ["GMAIL_APP_PASSWORD"]
+    sender    = os.environ["GMAIL_USER"].strip()
+    password  = os.environ["GMAIL_APP_PASSWORD"].strip()
     recipient = os.environ.get("DIGEST_RECIPIENT", sender)
 
     msg = MIMEMultipart("alternative")
